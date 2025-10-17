@@ -47,11 +47,12 @@
   // Fragment shader: grayscale by depth; nearer = darker
   const fsSource = `
     precision mediump float;
-    varying float v_depth;
+    varying float v_depth; // declared for linkage; not used
     uniform vec3 u_nearColor; // color when depth is 0.0 (closest)
     uniform vec3 u_farColor;  // color when depth is 1.0 (farthest)
     void main() {
-      float depth = clamp(v_depth, 0.0, 1.0);
+      // Use the depth buffer value directly to drive the gradient
+      float depth = clamp(gl_FragCoord.z, 0.0, 1.0);
       vec3 color = mix(u_nearColor, u_farColor, depth);
       gl_FragColor = vec4(color, 1.0);
     }
@@ -98,8 +99,9 @@
   };
 
   // Set gradient endpoints: dark gray (#1e1e1e) -> light gray (#c0c0c0)
-  const nearColor = new Float32Array([30/255, 30/255, 30/255]);
-  const farColor = new Float32Array([192/255, 192/255, 192/255]);
+  // Dark gray (almost black) -> light gray (almost white)
+  const nearColor = new Float32Array([26/255, 26/255, 26/255]);   // #1a1a1a
+  const farColor = new Float32Array([240/255, 240/255, 240/255]); // #f0f0f0
   gl.uniform3fv(uniforms.nearColor, nearColor);
   gl.uniform3fv(uniforms.farColor, farColor);
 
