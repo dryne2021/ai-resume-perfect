@@ -48,10 +48,12 @@
   const fsSource = `
     precision mediump float;
     varying float v_depth;
+    uniform vec3 u_nearColor; // color when depth is 0.0 (closest)
+    uniform vec3 u_farColor;  // color when depth is 1.0 (farthest)
     void main() {
-      // Limit maximum brightness so the far side is light gray, not white
-      float shade = v_depth * 0.8;      // far -> ~0.8 gray, near -> black
-      gl_FragColor = vec4(vec3(shade), 1.0);
+      float depth = clamp(v_depth, 0.0, 1.0);
+      vec3 color = mix(u_nearColor, u_farColor, depth);
+      gl_FragColor = vec4(color, 1.0);
     }
   `;
 
@@ -90,8 +92,16 @@
   const uniforms = {
     model: gl.getUniformLocation(program, 'u_model'),
     view: gl.getUniformLocation(program, 'u_view'),
-    proj: gl.getUniformLocation(program, 'u_proj')
+    proj: gl.getUniformLocation(program, 'u_proj'),
+    nearColor: gl.getUniformLocation(program, 'u_nearColor'),
+    farColor: gl.getUniformLocation(program, 'u_farColor')
   };
+
+  // Set gradient endpoints: dark gray (#1e1e1e) -> light gray (#c0c0c0)
+  const nearColor = new Float32Array([30/255, 30/255, 30/255]);
+  const farColor = new Float32Array([192/255, 192/255, 192/255]);
+  gl.uniform3fv(uniforms.nearColor, nearColor);
+  gl.uniform3fv(uniforms.farColor, farColor);
 
   // Cube geometry (positions and indices)
   const positions = new Float32Array([
