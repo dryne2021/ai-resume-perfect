@@ -49,7 +49,8 @@
     precision mediump float;
     varying float v_depth;
     void main() {
-      float shade = v_depth;            // far -> light, near -> dark
+      // Limit maximum brightness so the far side is light gray, not white
+      float shade = v_depth * 0.8;      // far -> ~0.8 gray, near -> black
       gl_FragColor = vec4(vec3(shade), 1.0);
     }
   `;
