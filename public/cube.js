@@ -44,17 +44,13 @@
     }
   `;
 
-  // Fragment shader: grayscale by depth; nearer = darker
+  // Fragment shader: constant dark gray color
   const fsSource = `
     precision mediump float;
     varying float v_depth; // declared for linkage; not used
-    uniform vec3 u_nearColor; // color when depth is 0.0 (closest)
-    uniform vec3 u_farColor;  // color when depth is 1.0 (farthest)
+    uniform vec3 u_color;  // constant dark gray color
     void main() {
-      // Use the depth buffer value directly to drive the gradient
-      float depth = clamp(gl_FragCoord.z, 0.0, 1.0);
-      vec3 color = mix(u_nearColor, u_farColor, depth);
-      gl_FragColor = vec4(color, 1.0);
+      gl_FragColor = vec4(u_color, 1.0);
     }
   `;
 
@@ -94,16 +90,12 @@
     model: gl.getUniformLocation(program, 'u_model'),
     view: gl.getUniformLocation(program, 'u_view'),
     proj: gl.getUniformLocation(program, 'u_proj'),
-    nearColor: gl.getUniformLocation(program, 'u_nearColor'),
-    farColor: gl.getUniformLocation(program, 'u_farColor')
+    color: gl.getUniformLocation(program, 'u_color')
   };
 
-  // Set gradient endpoints: dark gray (#1e1e1e) -> light gray (#c0c0c0)
-  // Dark gray (almost black) -> light gray (almost white)
-  const nearColor = new Float32Array([26/255, 26/255, 26/255]);   // #1a1a1a
-  const farColor = new Float32Array([240/255, 240/255, 240/255]); // #f0f0f0
-  gl.uniform3fv(uniforms.nearColor, nearColor);
-  gl.uniform3fv(uniforms.farColor, farColor);
+  // Set constant dark gray color (#1e1e1e)
+  const darkGray = new Float32Array([30/255, 30/255, 30/255]);
+  gl.uniform3fv(uniforms.color, darkGray);
 
   // Cube geometry (positions and indices)
   const positions = new Float32Array([
@@ -284,10 +276,9 @@
     const proj = perspective(Math.PI/2, aspect, 0.1, 100.0); // 90deg fov
     const view = lookAt([0, 0, 5], [0, 0, 0], [0, 1, 0]);
 
-    // Rotate 1/8 turn per second clockwise when looking from +Z
+    // Rotate 1/8 turn per second clockwise around Y axis only
     const rotY = rotationY(-t * (Math.PI/4));
-    const rotX = rotationX(t * (Math.PI/8));
-    const model = multiply(rotY, rotX);
+    const model = rotY;
 
     gl.uniformMatrix4fv(uniforms.model, false, model);
     gl.uniformMatrix4fv(uniforms.view, false, view);
