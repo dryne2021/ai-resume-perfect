@@ -196,20 +196,25 @@
 
   // Matrices
   const Mat4 = {
+    // Right-handed frustum matching our previous perspective and view math
     frustum(left, right, bottom, top, near, far) {
-      const scale_x = (2 * near) / (right - left);
-      const scale_y = (2 * near) / (top - bottom);
-      const t_x = (right + left) / (right - left);
-      const t_y = (top + bottom) / (top - bottom);
-      const nonlin_c2 = (far + near) / (far - near);
-      const nonlin_c1 = (2 * far * near) / (far - near);
-      const c1 = nonlin_c1;
-      const c2 = nonlin_c2;
+      const rl = right - left;
+      const tb = top - bottom;
+      const fn = far - near;
+
+      const scale_x = (2 * near) / rl;
+      const scale_y = (2 * near) / tb;
+      const t_x = (right + left) / rl;
+      const t_y = (top + bottom) / tb;
+
+      const c22 = -(far + near) / fn;        // row2 col3
+      const c32 = -(2 * far * near) / fn;    // row3 col3
+
       return new Float32Array([
         scale_x, 0,       t_x,  0,
         0,       scale_y, t_y,  0,
-        0,       0,       c2,  -c1,
-        0,       0,       1,    0,
+        0,       0,       c22, -1,
+        0,       0,       c32,  0,
       ]);
     },
     perspectiveFovY(fovyRad, aspect, near, far) {
