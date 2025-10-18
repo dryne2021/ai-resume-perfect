@@ -195,16 +195,31 @@
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
   // Matrices
-  function perspective(fovyRad, aspect, near, far){
-    const f = 1.0 / Math.tan(fovyRad / 2);
-    const rangeInv = 1.0 / (near - far);
-    return new Float32Array([
-      f / aspect, 0, 0, 0,
-      0, f, 0, 0,
-      0, 0, (near + far) * rangeInv, -1,
-      0, 0, (2 * near * far) * rangeInv, 0,
-    ]);
-  }
+  const Mat4 = {
+    frustum(left, right, bottom, top, near, far) {
+      const scale_x = (2 * near) / (right - left);
+      const scale_y = (2 * near) / (top - bottom);
+      const t_x = (right + left) / (right - left);
+      const t_y = (top + bottom) / (top - bottom);
+      const nonlin_c2 = (far + near) / (far - near);
+      const nonlin_c1 = (2 * far * near) / (far - near);
+      const c1 = nonlin_c1;
+      const c2 = nonlin_c2;
+      return new Float32Array([
+        scale_x, 0,       t_x,  0,
+        0,       scale_y, t_y,  0,
+        0,       0,       c2,  -c1,
+        0,       0,       1,    0,
+      ]);
+    },
+    perspectiveFovY(fovyRad, aspect, near, far) {
+      const top = Math.tan(fovyRad * 0.5) * near;
+      const bottom = -top;
+      const right = top * aspect;
+      const left = -right;
+      return this.frustum(left, right, bottom, top, near, far);
+    }
+  };
 
   function lookAt(eye, center, up){
     const zx = eye[0] - center[0];
@@ -273,7 +288,7 @@
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     const aspect = canvas.width / Math.max(1, canvas.height);
-    const proj = perspective(Math.PI/2, aspect, 0.1, 100.0); // 90deg fov
+    const proj = Mat4.perspectiveFovY(Math.PI/2, aspect, 0.1, 100.0); // 90deg fov using frustum
     const view = lookAt([0, 0, 5], [0, 0, 0], [0, 1, 0]);
 
     // Rotate 1/8 turn per second clockwise around Y axis only
