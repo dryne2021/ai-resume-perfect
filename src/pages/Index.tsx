@@ -1,8 +1,9 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
-import { ResumeBuilder } from "@/components/ResumeBuilder";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Footer } from "@/components/Footer";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 const Index = () => {
   return (
@@ -10,8 +11,9 @@ const Index = () => {
       <Header />
       <HeroSection />
       <FeaturesSection />
-      <ResumeBuilder />
+      <TestimonialsSection />
       <Footer />
+      <WhatsAppFloat />
     </div>
   );
 };

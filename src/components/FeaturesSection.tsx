@@ -1,57 +1,51 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Sparkles, 
-  FileText, 
-  Zap, 
-  Target, 
-  Download, 
-  Shield,
+import {
+  Sparkles,
+  ClipboardList,
+  GraduationCap,
+  Laptop,
+  Target,
+  ShieldCheck,
   Clock,
-  Award,
-  Bot
+  BookOpen
 } from "lucide-react";
 
 const features = [
   {
-    icon: Bot,
-    title: "AI-Powered Content",
-    description: "Generate professional resume content using advanced AI that understands your industry and role requirements."
+    icon: BookOpen,
+    title: "Assignment Help",
+    description: "Expert guidance in nursing, business, education, and academic writing."
+  },
+  {
+    icon: ClipboardList,
+    title: "Project Guidance",
+    description: "Support for capstone projects, theses, and research papers from topic to defense."
+  },
+  {
+    icon: GraduationCap,
+    title: "Exam & Quiz Prep",
+    description: "Coaching, study plans, and online class support to boost your grades."
+  },
+  {
+    icon: Laptop,
+    title: "Online Class Support",
+    description: "Reliable assistance for coursework, discussions, and weekly tasks."
   },
   {
     icon: Target,
-    title: "ATS Optimization",
-    description: "Ensure your resume passes Applicant Tracking Systems with our built-in optimization engine."
+    title: "Study Coaching",
+    description: "Personalized strategies to improve understanding, retention, and performance."
   },
   {
-    icon: Zap,
-    title: "Quick Generation",
-    description: "Create a complete, professional resume in under 2 minutes with our streamlined process."
-  },
-  {
-    icon: FileText,
-    title: "Multiple Templates",
-    description: "Choose from our collection of professionally designed, industry-specific resume templates."
-  },
-  {
-    icon: Download,
-    title: "Export Options",
-    description: "Download your resume in multiple formats including PDF, DOCX, and get shareable links."
-  },
-  {
-    icon: Shield,
-    title: "Privacy Focused",
-    description: "Your data is encrypted and secure. We never share your personal information with third parties."
+    icon: ShieldCheck,
+    title: "Confidential & Plagiarism-Free",
+    description: "Strict confidentiality and original work with proper academic standards."
   },
   {
     icon: Clock,
-    title: "Real-time Preview",
-    description: "See your resume update in real-time as you make changes with our live preview feature."
+    title: "On-Time Delivery",
+    description: "Fast turnaround with clear milestones and updates."
   },
-  {
-    icon: Award,
-    title: "Job Matching",
-    description: "Tailor your resume to specific job descriptions with our intelligent matching algorithm."
-  }
 ];
 
 export const FeaturesSection = () => {
@@ -61,19 +55,15 @@ export const FeaturesSection = () => {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-accent/50 backdrop-blur-sm px-4 py-2 rounded-full border border-border mb-6">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">Powerful Features</span>
+            <span className="text-sm font-medium">How I Can Help</span>
           </div>
           
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Everything You Need to{" "}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
-              Land Your Dream Job
-            </span>
+            Comprehensive Academic Support
           </h2>
           
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Our AI-powered resume builder combines cutting-edge technology with proven recruiting insights 
-            to help you create resumes that get noticed.
+            From assignments to exam preparation, get personalized, reliable, and timely support for your studies.
           </p>
         </div>
 
@@ -99,24 +89,11 @@ export const FeaturesSection = () => {
           ))}
         </div>
 
-        {/* Stats Section */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div className="text-3xl font-bold text-primary mb-2">50,000+</div>
-            <div className="text-muted-foreground text-sm">Resumes Created</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-primary mb-2">98%</div>
-            <div className="text-muted-foreground text-sm">ATS Pass Rate</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-primary mb-2">2 Min</div>
-            <div className="text-muted-foreground text-sm">Average Time</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-primary mb-2">4.9/5</div>
-            <div className="text-muted-foreground text-sm">User Rating</div>
-          </div>
+        {/* CTA */}
+        <div className="mt-16 text-center">
+          <a href="/services" className="inline-block">
+            <span className="text-primary font-semibold hover:underline">Explore all services →</span>
+          </a>
         </div>
       </div>
     </section>
